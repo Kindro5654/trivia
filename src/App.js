@@ -1,25 +1,43 @@
-import logo from './logo.svg';
+import logo from './icons/logo.svg';
+import React from 'react';
 import './App.css';
+import Form from './components/form'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+class App extends React.Component {
+ 
+   state = {
+     results: undefined,
+     error: undefined
+   }
+
+   gettingQuestion = async (e) => {
+     e.preventDefault();
+    var amount = e.target.elements.amount.value;
+    var difficulty = e.target.elements.difficulty.value;
+    const api_url = await
+    fetch(`https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=boolean`);
+    const data = await api_url.json();
+    console.log(data);
+
+    this.setState({
+      results: data.results,
+      error: ""
+    });
+  }
+
+  render() {
+    return (
+      <div className="main-theme">
+        <div className="content">
+          <p className="welcome-text">Welcome to the</p>
+          <img src={logo} className="logo" alt="logo" />
+          <Form questionMethod={this.gettingQuestion}/>
+      </div>
+      </div>
+    );
+  }
 }
 
 export default App;
